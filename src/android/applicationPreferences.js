@@ -12,10 +12,20 @@
 	AppPreferences.prototype.get = function(key,success,fail) {
 	    cordova.exec(success,fail,"applicationPreferences","get",[key]);
 	};
-	
-	AppPreferences.prototype.set = function(key,value,success,fail) {
-	    cordova.exec(success,fail,"applicationPreferences","set",[key, value]);
-	};
+
+    AppPreferences.prototype._setRaw = function(type, key, value, success, fail) {
+        cordova.exec(success,fail,"applicationPreferences","set",[key, value, type]);
+    };
+
+    AppPreferences.prototype.set = AppPreferences.prototype._setRaw.bind(null, "string");
+
+    AppPreferences.prototype.setString = AppPreferences.prototype._setRaw.bind(null, "string");
+
+    AppPreferences.prototype.setLong = AppPreferences.prototype._setRaw.bind(null, "long");
+
+    AppPreferences.prototype.setInt = AppPreferences.prototype._setRaw.bind(null, "int");
+
+    AppPreferences.prototype.setBoolean = AppPreferences.prototype._setRaw.bind(null, "boolean");
 	
 	AppPreferences.prototype.load = function(success,fail) {
 	    cordova.exec(success,fail,"applicationPreferences","load",[]);    

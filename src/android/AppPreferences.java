@@ -44,14 +44,27 @@ public class AppPreferences extends CordovaPlugin {
                 }
             } else if (action.equals("set")) {
                 String key = args.getString(0);
-                String value = args.getString(1);               
+                String value = args.getString(1);
+                String dataType = args.getString(2);
                 Editor editor = sharedPrefs.edit();
-                if ("true".equals(value.toLowerCase()) || "false".equals(value.toLowerCase())) {
+
+                if(dataType.equals("boolean")) {
                     editor.putBoolean(key, Boolean.parseBoolean(value));
+                } else if(dataType.equals("int")) {
+                    editor.putInt(key, Integer.parseInt(value));
+                } else if(dataType.equals("long")) {
+                    editor.putLong(key, Long.parseLong(value));
+                } else if(dataType.equals("float")) {
+                    editor.putFloat(key, Float.parseFloat(value));
                 } else {
-                    editor.putString(key, value);
+                    if ("true".equals(value.toLowerCase()) || "false".equals(value.toLowerCase())) {
+                        editor.putBoolean(key, Boolean.parseBoolean(value));
+                    } else {
+                        editor.putString(key, value);
+                    }
                 }
-                callbackContext.sendPluginResult(new PluginResult(status, editor.commit()));               
+
+                callbackContext.sendPluginResult(new PluginResult(status, editor.commit()));
             } else if (action.equals("load")) {
             	
 				this.load(callbackContext);
